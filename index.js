@@ -27,31 +27,31 @@ app.use(express.static("public"));
 const USUARIO = "admin";
 const SENHA = "admin123";
 
-const estiloBase = `
-    body { background: linear-gradient(135deg, #1a2744, #f5f0e8); min-height: 100vh; font-family: Arial, sans-serif; }
-    .navbar-biblioteca { background: linear-gradient(90deg, #1a2744, #223060); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
-    .navbar-biblioteca a { color: rgba(255,255,255,0.88); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; }
-    .navbar-biblioteca a:hover { background: rgba(255,255,255,0.18); color: white; }
-    .navbar-brand-text { color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
-    .card-return { background-color: #f5f0e8; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-    .card-return h2 { text-align: center; margin-bottom: 30px; font-weight: 600; color: #1a2744; }
-    .form-control { border-radius: 25px; padding-left: 15px; }
-    .form-control:focus { border-color: #1a2744; box-shadow: 0 0 0 0.2rem rgba(26,39,68,0.3); }
-    .form-select { border-radius: 25px; padding-left: 15px; }
-    .form-select:focus { border-color: #1a2744; box-shadow: 0 0 0 0.2rem rgba(26,39,68,0.3); }
-    .btn-submit { border: none; border-radius: 25px; background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; font-weight: 500; padding: 10px; width: 100%; display: block; text-decoration: none; margin-bottom: 10px; cursor: pointer; }
-    .btn-submit:hover { opacity: 0.9; color: white; }
-    .btn-voltar { border-radius: 25px; width: 100%; margin-top: 10px; border: 2px solid #1a2744; color: #1a2744; font-weight: 500; background: transparent; }
-    .btn-voltar:hover { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; border: none; }
-    .ultimo-acesso { background: #e8e0d0; border: 1px solid #c8b89a; border-radius: 10px; padding: 10px 18px; margin-bottom: 20px; color: #1a2744; font-size: 0.92rem; }
-    thead { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; }
-    tbody tr:hover { background-color: #ede8df; }
-    .body2 { display: flex; justify-content: center; align-items: center; padding: 40px 16px; min-height: 90vh; }
-    .container-form { display: flex; flex-direction: column; align-items: center; width: 100%; }
-`;
+app.get('/', (req, res) => {
+    const ultimoAcesso = req.cookies.ultimoAcesso || null;
 
-function renderNavbar(req, res) {
     res.write(`
+        <html lang="pt-br">
+        <head>
+            <meta charset="UTF-8">
+            <title>Biblioteca</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                body { background: linear-gradient(135deg, #1a2744, #f5f0e8); min-height: 100vh; font-family: Arial, sans-serif; }
+                .navbar-biblioteca { background: linear-gradient(90deg, #1a2744, #223060); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
+                .navbar-biblioteca a { color: rgba(255,255,255,0.88); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; }
+                .navbar-biblioteca a:hover { background: rgba(255,255,255,0.18); color: white; }
+                .navbar-brand-text { color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+                .body2 { display: flex; justify-content: center; align-items: center; padding: 40px 16px; min-height: 90vh; }
+                .container-form { display: flex; flex-direction: column; align-items: center; width: 100%; }
+                .menu-card { background-color: #f5f0e8; padding: 40px; border-radius: 15px; width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: center; }
+                .menu-card h2 { color: #1a2744; margin-bottom: 10px; font-weight: 700; }
+                .ultimo-acesso { background: #e8e0d0; border: 1px solid #c8b89a; border-radius: 10px; padding: 10px 18px; margin-bottom: 20px; color: #1a2744; font-size: 0.92rem; }
+                .btn-submit { border: none; border-radius: 25px; background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; font-weight: 500; padding: 10px; width: 100%; display: block; text-decoration: none; margin-bottom: 10px; cursor: pointer; }
+                .btn-submit:hover { opacity: 0.9; color: white; }
+            </style>
+        </head>
+        <body>
         <div class="navbar-biblioteca">
             <div>
                 <a href="/" class="navbar-brand-text">📚 Biblioteca</a>
@@ -68,28 +68,6 @@ function renderNavbar(req, res) {
     res.write(`
             </div>
         </div>
-    `);
-}
-
-app.get('/', (req, res) => {
-    const ultimoAcesso = req.cookies.ultimoAcesso || null;
-
-    res.write(`
-        <html lang="pt-br">
-        <head>
-            <meta charset="UTF-8">
-            <title>Biblioteca</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-            <style>
-                ${estiloBase}
-                .menu-card { background-color: #f5f0e8; padding: 40px; border-radius: 15px; width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: center; }
-                .menu-card h2 { color: #1a2744; margin-bottom: 10px; font-weight: 700; }
-            </style>
-        </head>
-        <body>
-    `);
-    renderNavbar(req, res);
-    res.write(`
         <div class="body2">
             <div class="container-form">
                 <div class="menu-card">
@@ -133,12 +111,35 @@ app.get('/livros', (req, res) => {
             <meta charset="UTF-8">
             <title>Cadastro de Livros</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-            <style>${estiloBase}</style>
+            <style>
+                body { background: linear-gradient(135deg, #1a2744, #f5f0e8); min-height: 100vh; font-family: Arial, sans-serif; }
+                .navbar-biblioteca { background: linear-gradient(90deg, #1a2744, #223060); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
+                .navbar-biblioteca a { color: rgba(255,255,255,0.88); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; }
+                .navbar-biblioteca a:hover { background: rgba(255,255,255,0.18); color: white; }
+                .navbar-brand-text { color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+                .card-return { background-color: #f5f0e8; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+                .card-return h2 { text-align: center; margin-bottom: 30px; font-weight: 600; color: #1a2744; }
+                .form-control { border-radius: 25px; padding-left: 15px; }
+                .form-control:focus { border-color: #1a2744; box-shadow: 0 0 0 0.2rem rgba(26,39,68,0.3); }
+                .btn-submit { border: none; border-radius: 25px; background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; font-weight: 500; padding: 10px; width: 100%; display: block; text-decoration: none; margin-bottom: 10px; cursor: pointer; }
+                .btn-submit:hover { opacity: 0.9; color: white; }
+                .btn-voltar { border-radius: 25px; width: 100%; margin-top: 10px; border: 2px solid #1a2744; color: #1a2744; font-weight: 500; background: transparent; }
+                .btn-voltar:hover { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; border: none; }
+                thead { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; }
+                tbody tr:hover { background-color: #ede8df; }
+            </style>
         </head>
         <body>
-    `);
-    renderNavbar(req, res);
-    res.write(`
+        <div class="navbar-biblioteca">
+            <div>
+                <a href="/" class="navbar-brand-text">📚 Biblioteca</a>
+            </div>
+            <div>
+                <a href="/">Menu</a>
+                <span style="color:white; padding: 6px 14px; font-size:0.9rem;">Olá, <strong>${req.session.usuario}</strong></span>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
         <div style="max-width:700px; margin:40px auto; padding:0 16px;">
             <div class="card-return">
                 <h2>Cadastro de Livros</h2>
@@ -234,12 +235,37 @@ app.get('/leitores', (req, res) => {
             <meta charset="UTF-8">
             <title>Cadastro de Leitores</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-            <style>${estiloBase}</style>
+            <style>
+                body { background: linear-gradient(135deg, #1a2744, #f5f0e8); min-height: 100vh; font-family: Arial, sans-serif; }
+                .navbar-biblioteca { background: linear-gradient(90deg, #1a2744, #223060); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
+                .navbar-biblioteca a { color: rgba(255,255,255,0.88); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; }
+                .navbar-biblioteca a:hover { background: rgba(255,255,255,0.18); color: white; }
+                .navbar-brand-text { color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+                .card-return { background-color: #f5f0e8; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+                .card-return h2 { text-align: center; margin-bottom: 30px; font-weight: 600; color: #1a2744; }
+                .form-control { border-radius: 25px; padding-left: 15px; }
+                .form-control:focus { border-color: #1a2744; box-shadow: 0 0 0 0.2rem rgba(26,39,68,0.3); }
+                .form-select { border-radius: 25px; padding-left: 15px; }
+                .form-select:focus { border-color: #1a2744; box-shadow: 0 0 0 0.2rem rgba(26,39,68,0.3); }
+                .btn-submit { border: none; border-radius: 25px; background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; font-weight: 500; padding: 10px; width: 100%; display: block; text-decoration: none; margin-bottom: 10px; cursor: pointer; }
+                .btn-submit:hover { opacity: 0.9; color: white; }
+                .btn-voltar { border-radius: 25px; width: 100%; margin-top: 10px; border: 2px solid #1a2744; color: #1a2744; font-weight: 500; background: transparent; }
+                .btn-voltar:hover { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; border: none; }
+                thead { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; }
+                tbody tr:hover { background-color: #ede8df; }
+            </style>
         </head>
         <body>
-    `);
-    renderNavbar(req, res);
-    res.write(`
+        <div class="navbar-biblioteca">
+            <div>
+                <a href="/" class="navbar-brand-text">📚 Biblioteca</a>
+            </div>
+            <div>
+                <a href="/">Menu</a>
+                <span style="color:white; padding: 6px 14px; font-size:0.9rem;">Olá, <strong>${req.session.usuario}</strong></span>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
         <div style="max-width:700px; margin:40px auto; padding:0 16px;">
             <div class="card-return">
                 <h2>Cadastro de Leitores</h2>
@@ -356,15 +382,33 @@ app.get('/login', (req, res) => {
             <title>Login</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
             <style>
-                ${estiloBase}
+                body { background: linear-gradient(135deg, #1a2744, #f5f0e8); min-height: 100vh; font-family: Arial, sans-serif; }
+                .navbar-biblioteca { background: linear-gradient(90deg, #1a2744, #223060); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
+                .navbar-biblioteca a { color: rgba(255,255,255,0.88); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; }
+                .navbar-biblioteca a:hover { background: rgba(255,255,255,0.18); color: white; }
+                .navbar-brand-text { color: white; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+                .body2 { display: flex; justify-content: center; align-items: center; padding: 40px 16px; min-height: 90vh; }
+                .container-form { display: flex; flex-direction: column; align-items: center; width: 100%; }
                 .login-card { background-color: #f5f0e8; padding: 40px; border-radius: 15px; width: 360px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
                 .login-card h2 { text-align: center; margin-bottom: 30px; font-weight: 600; color: #1a2744; }
+                .form-control { border-radius: 25px; padding-left: 15px; }
+                .form-control:focus { border-color: #1a2744; box-shadow: 0 0 0 0.2rem rgba(26,39,68,0.3); }
+                .btn-submit { border: none; border-radius: 25px; background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; font-weight: 500; padding: 10px; width: 100%; display: block; text-decoration: none; margin-bottom: 10px; cursor: pointer; }
+                .btn-submit:hover { opacity: 0.9; color: white; }
+                .btn-voltar { border-radius: 25px; width: 100%; margin-top: 10px; border: 2px solid #1a2744; color: #1a2744; font-weight: 500; background: transparent; }
+                .btn-voltar:hover { background: linear-gradient(90deg, #1a2744, #c8b89a); color: white; border: none; }
             </style>
         </head>
         <body>
-    `);
-    renderNavbar(req, res);
-    res.write(`
+        <div class="navbar-biblioteca">
+            <div>
+                <a href="/" class="navbar-brand-text">📚 Biblioteca</a>
+            </div>
+            <div>
+                <a href="/">Menu</a>
+                <a href="/login">Login</a>
+            </div>
+        </div>
         <div class="body2">
             <div class="container-form">
                 <div class="login-card">
